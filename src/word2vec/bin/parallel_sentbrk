@@ -1,0 +1,27 @@
+#!/bin/bash
+jobsthreads=24
+
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
+check_ret()
+{
+if [ "$?" -ne "0" ] ; then
+    echo "run command error, quit...."
+    exit -2
+fi
+}
+
+cut(){
+    python sentsplit/sentsplit.py $1 $1.sent
+
+}
+
+argfiles=""
+for d in `ls data/x*.cut`; do
+    argfiles=$argfiles" "$d
+done
+export -f cut
+
+cmd="parallel --xapply --jobs $jobsthreads cut ::: $argfiles"
+echo $cmd
+$cmd
+
