@@ -19,7 +19,13 @@ def trim(words):
     else :
         return ''
 
-def es_query(word):
+def es_query(word,start_time,end_time):
+    """
+    :param word:搜索关键词
+    :param start_time: 起始时间
+    :param end_time: 结束时间
+    :return:
+    """
 #搜索口红，必须包含品牌，或者是必须是推荐帖
     body = {
     "query": {"bool": {"must": [{"range": {
@@ -56,7 +62,30 @@ def main():
             for word in  re_format:
                 text_list.add(word)
     return text_list
-        
+
+def split_time(start_time,end_time):
+    """
+    将时间按月份切分
+    :param start_time:起始时间
+    :param end_time: 结束时间
+    :return:
+    """
+    import datetime
+    import dateutil.relativedelta
+
+    start = datetime.datetime.strptime(start, "%Y-%m-%d")
+    end = datetime.datetime.strptime(end, "%Y-%m-%d")
+
+    start_month = datetime.datetime(start.year, start.month, 1)
+    end_month = datetime.datetime(end.year, end.month, 1)
+    date_list = []
+    while start_month <= end_month:
+        print start_month
+        date_list.append(start_month)
+        start_month += dateutil.relativedelta.relativedelta(months=1)
+    print date_list
+
+
 if __name__ == "__main__":
     
    # outfile = open(sys.argv[1],'wb') 

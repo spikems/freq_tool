@@ -16,12 +16,18 @@ from exldeal import XLSDeal
 
 load_industrydict([0,2,7])
 class DocKluster(object):
+    """
+    跟短文本聚类
+    """
     def __init__(self,infile,outfile='doc_result'):
-        self.infile = infile
-        self.outfile = outfile
+        self.infile = infile    #输入一个excel ,格式:
+        self.outfile = outfile  #输入一个txt ,
 
     def stop_word(self):
-
+        """
+        停用词 和 无意义的词
+        :return:
+        """
         stop_word = set([])
         with open('dict/stopword.dict','r') as inf:
             for line in inf:
@@ -32,10 +38,12 @@ class DocKluster(object):
                 stop_word.add(line.strip())
         return stop_word
 
-    def add_feature(self):
-        pass
-
     def cut_word(self,):
+        """
+        读取文件并且分词
+
+        :return:
+        """
         xls_ins = XLSDeal()
         lfile = xls_ins.XlsToList(self.infile)
         lcut = []
@@ -44,9 +52,9 @@ class DocKluster(object):
         # outf = open(self.outfile,'w')
 
         for line in self.input:
-            sent = line.split('\t')[0].strip()
-            oline = ' '.join([i.word for i in norm_seg(sent) if i.word.encode('utf-8','ignore') not in stopword ])
-            feature = ' '.join('#'.join(line.split('\t')[3:]).split('#')).decode('utf-8','ignore')
+            sent = line.split('\t')[0].strip() #第一列句子
+            oline = ' '.join([i.word for i in norm_seg(sent) if i.word.encode('utf-8','ignore') not in stopword ]) #
+            feature = ' '.join('#'.join(line.split('\t')[1:]).split('#')).decode('utf-8','ignore')
             # print 'feature',feature
             lcut.append('%s %s'%(oline,feature))
             # outf.write('%s\n'%oline.encode('utf-8','ignore'))
@@ -72,7 +80,11 @@ class DocKluster(object):
         self.data_vec = data_vec
 
 
-    def kluster(self,num_cluster=2000):
+    def kluster(self,num_cluster=50):
+        """
+        :param num_cluster:  聚成多少类
+        :return:
+        """
         lresult = {}
         # km = KMeans(num_cluster)
         # result = km.fit_predict(self.data_vec)
@@ -114,7 +126,10 @@ class DocKluster(object):
         self.kluster()
 
 if __name__ == '__main__':
-    ins = DocKluster('data/need_train.xlsx')
+    #输入格式参考need_train.xlsx
+    inputfile = input('输入文件名:')
+    print 'inputfile',inputfile
+    ins = DocKluster(inputfile)
     ins.run2()
 
 
