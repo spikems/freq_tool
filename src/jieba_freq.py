@@ -5,7 +5,8 @@
 import sys
 import os
 from wcut.jieba.norm import norm_cut,norm_seg,load_industrydict
-from wcut.jieba import  suggest_freq
+from wcut.jieba import  suggest_freq,load_userdict
+from optparse import OptionParser
 
 load_industrydict([0,2,7])
 class JiebaFreq(object):
@@ -34,17 +35,25 @@ class JiebaFreq(object):
                     outfile.write(out_line)
         outfile.close()
 
-if __name__ == '__main__':
+def load_option():
+    op = OptionParser()
+    op.add_option("-i",
+                  action="store", type=str,dest="infile",
+                  help="provide a question.")
+    op.add_option("-o",
+                  action="store", type=str, dest="outfile",
+                  help="provide a way ,can be edit-distance or tfidf")
+    (opts, args) = op.parse_args()
 
+    return opts
+
+
+
+
+if __name__ == '__main__':
+    opt = load_option()
     ins = JiebaFreq()
-#    outf = open('freqresult.txt','wb')
-#    with open(sys.argv[1],'rb') as inf :
-#        for line in inf :
-#            lineA = ins.FreqSug(line.strip())
-#            if lineA:
-#                outf.write(lineA)
-#    outf.close()
-    ins.read_file(sys.argv[1],sys.argv[2])
+    ins.read_file(opt.infile,opt.outfile)
 
 
 
