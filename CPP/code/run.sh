@@ -1,1 +1,0 @@
-hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-*.jar -files mapper.py,reducer.py  -mapper mapper.py -reducer reducer.py -input /user/wangwei/chi2_val/chi2_raw_data   -output /user/wangwei/chi2_val/chi2_result

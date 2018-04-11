@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import sys
-
-inf = open(sys.argv[1],'rb')
-for line in inf:
+for line in sys.stdin:
     words = line.strip().split('\t')
     length = len(words)
     if length < 1:
@@ -22,5 +20,5 @@ for line in inf:
     print "2_%s\t%s" % (words[length - 1], 1)
             #print "%s\t%s" % (out, 1)
         
-inf.close()
+
 
